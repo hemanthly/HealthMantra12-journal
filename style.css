@@ -1,0 +1,57 @@
+h1{
+    color: rgb(43, 4, 87);
+    background-color: bisque;
+}
+
+
+/* Textbox component css */
+/* Textbox.css */
+.journal-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .journal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .journal-header h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .journal-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  input,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  textarea {
+    height: 150px;
+  }
+  
+  /* Style the date picker */
+  .react-datepicker-wrapper {
+    width: 150px;
+    margin-left: auto;
+  }
+  button{
+    width: 100%;
+  }
+  
