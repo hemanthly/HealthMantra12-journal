@@ -1,19 +1,29 @@
+require('dotenv').config(); // Load environment variables
+
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
 
-const JournalTextModel = require('./models/journalTextModel')
+// Import your passport-config.js file
+const passportConfig = require("./config/passport-config");
+
+const cors = require('cors');
+
+const sessionSecret = process.env.SESSION_SECRET || 'aVeryLongAndSecureSecret123!@#';
+
+const JournalTextModel = require('./models/journalTextModel');
+const userModel = require('./models/UserModel');
 
 const authRoutes = require('./Routes/auth');  // Import the authentication routes
 
 const app = express();
-const port = 3000;
-
-require('dotenv').config(); // Load environment variables
+const port = process.env.BACKEND_PORT || 5000;
 
 // Middleware to parse incoming JSON requests
-app.use(express.json()) 
+app.use(express.json());
+
+app.use(cors()); // CORS middleware
 
 // Middleware to set basic CORS headers
 app.use((req, res, next) => {
@@ -25,14 +35,21 @@ app.use((req, res, next) => {
 
 // Session middleware
 app.use(session({
-    secret: 'your_secret_key',  // Replace with a strong, unique secret
+    secret: sessionSecret,
     resave: true,
     saveUninitialized: true,
+    cookie: { maxAge: 60 * 60 * 1000 }, // Session lasts for 1 hour
 }));
 
-// Passport middleware setup
+//Passport middleware setup
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Configure Passport using the exported object
+passportConfig.initialize(passport);
+
+// Use the authentication routes
+app.use('/auth', authRoutes);
 
 //Routes
 app.get('/', (req, res) => {
@@ -43,7 +60,42 @@ app.get('/blog', (req, res) => {
     res.send("welcome to heFDGFDGDFGalthmantra BLOG!!");
 })
 
-app.post('/journal', async(req, res)=>{
+// app.post('/register', async(req, res) => {
+//     try {
+//         console.log("we entered register post method!!");
+//         const { firstName, lastName, email, password } = req.body; // object Destructuring the request body
+
+//         const newUser = await userModel.create({ firstName, lastName, email, password });
+
+//         res.status(200).json(newUser);
+//     } catch (error) {
+//         console.error(error.message);
+//         res.status(500).json({message: 'Internal Server Error'});
+//     }
+// })
+
+// app.post('/login', async (req, res) => {
+//     try {
+//       const { email, password } = req.body;
+  
+//       // Find the user by email
+//       const user = await User.findOne({ email });
+  
+//       // If the user is not found or the password is incorrect, send an error response
+//       if (!user || !await user.comparePassword(password)) {
+//         return res.status(401).json({ message: 'Invalid email or password' });
+//       }
+  
+//       // If the email and password are correct, you can set up a session or token-based authentication here
+//       // For simplicity, let's just send a success response
+//       res.status(200).json({ message: 'Login successful', user });
+//     } catch (error) {
+//       console.error(error.message);
+//       res.status(500).json({ message: 'Internal Server Error' });
+//     }
+//   });
+
+app.post('/', async(req, res)=>{
 
     try {
         const { date, title, message } = req.body; // Destructure the request body
@@ -69,9 +121,6 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch((error) => {
     console.error("Error while connecting to MongoDB:", error.message);
   });
-
-// Use the authentication routes
-app.use('/auth', authRoutes);
 
 // Your other routes and configurations go here
 

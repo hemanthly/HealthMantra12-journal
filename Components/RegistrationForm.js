@@ -1,12 +1,16 @@
+import React, { useState } from "react";
+import axios from "axios";
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+require('dotenv').config(); // Load environment variables
 
-import React, { useState } from 'react';
+const FRONTEND_API_URL = process.env.REACT_APP_API_URL;
 
 const RegistrationForm = () => {
   const [user, setUser] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
   });
 
   const handleChange = (e) => {
@@ -16,72 +20,75 @@ const RegistrationForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // You can add your registration logic here
-    console.log('User:', user);
-
-    // Assuming you have a function to make the registration API call
-    // For example, using axios:
-    // registerUser(user)
-    //   .then(response => console.log('Registration successful', response))
-    //   .catch(error => console.error('Registration failed', error));
+    // console.log("User:", user);
+    // Making the registration API call using axios
+    axios.post("http://localhost:4006/auth/register", user)
+      .then((response) => {
+        console.log("Registration successful", response.data);
+        // You can add any further logic here after a successful registration
+      })
+      .catch((error) => {
+        console.error("Registration failed", error);
+        // You can handle errors or provide user feedback here
+      });
   };
 
   return (
-    <div className='register'>
+<div className="container mt-5">
       <h1>Registration Form</h1>
-      
       <form onSubmit={handleSubmit}>
-      <label>
-        First Name:
-        <input
-          type="text"
-          name="firstName"
-          value={user.firstName}
-          onChange={handleChange}
-          required
-        />
-      </label>
-      <br />
-
-      <label>
-        Last Name:
-        <input
-          type="text"
-          name="lastName"
-          value={user.lastName}
-          onChange={handleChange}
-          required
-        />
-      </label>
-      <br />
-
-      <label>
-        Email:
-        <input
-          type="email"
-          name="email"
-          value={user.email}
-          onChange={handleChange}
-          required
-        />
-      </label>
-      <br />
-
-      <label>
-        Password:
-        <input
-          type="password"
-          name="password"
-          value={user.password}
-          onChange={handleChange}
-          required
-        />
-      </label>
-      <br />
-
-      <button type="submit">Register</button>
-    </form>
+        <div className="mb-3">
+          <label htmlFor="firstName" className="form-label">First Name</label>
+          <input
+            type="text"
+            className="form-control"
+            id="firstName"
+            name="firstName"
+            value={user.firstName}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="lastName" className="form-label">Last Name</label>
+          <input
+            type="text"
+            className="form-control"
+            id="lastName"
+            name="lastName"
+            value={user.lastName}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">Email</label>
+          <input
+            type="email"
+            className="form-control"
+            id="email"
+            name="email"
+            value={user.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">Password</label>
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            name="password"
+            value={user.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">Register</button>
+      </form>
     </div>
+
   );
 };
 

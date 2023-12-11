@@ -5,11 +5,12 @@ import "/node_modules/bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
 
 const Textbox = () => {
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [journalTitle, setJournalTitle] = useState('');
   const [journalText, setJournalText] = useState('');
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
     try {
       // Prepare the data for the API call
       const data = {
@@ -17,9 +18,9 @@ const Textbox = () => {
         title: journalTitle,
         message: journalText,
       };
-
+      
       // Make the API call to your server
-      const response = await axios.post('http://localhost:3000/journal', data);
+      const response = await axios.post('http://localhost:4006/', data); 
 
       // Handle the response if needed
       console.log('API Response:', response.data);
