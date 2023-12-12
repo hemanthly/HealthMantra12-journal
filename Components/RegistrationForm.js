@@ -33,6 +33,24 @@ const RegistrationForm = () => {
       });
   };
 
+  const handleGoogleSignUp = async () => {
+    try {
+      const response = await axios.get("http://localhost:4006/auth/google", {
+        withCredentials: true, // include cookies in the request if needed
+      });
+
+      if (response.status === 200) {
+        // Handle successful response, e.g., redirect to the Google authentication page
+        window.location.href = "http://localhost:4006/auth/google";
+      } else {
+        // Handle error response
+        console.error("Google authentication request failed");
+      }
+    } catch (error) {
+      console.error("Error during Google authentication request", error);
+    }
+  };
+
   return (
 <div className="container mt-5">
       <h1>Registration Form</h1>
@@ -87,6 +105,10 @@ const RegistrationForm = () => {
         </div>
         <button type="submit" className="btn btn-primary">Register</button>
       </form>
+      <a className='btn btn-block' onClick={handleGoogleSignUp} role='button'>
+        {/* <i className='fab fa-google'></i> */}
+        Sign up with Google
+      </a>
     </div>
 
   );

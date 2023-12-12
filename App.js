@@ -15,12 +15,12 @@ import AppRouter from "./Components/Router";
 //       <h3 style={{ color: '#00FF00' }}>This text is in green (#00FF00)</h3>
 //     </div>
 //   );
-  
+
 const AppWrapper = () => (
   <div id="container">
     {/* <Title></Title>
     <h4>{number * 15.34}</h4> */}
-    <h1 className="heading">Hello health mantra12!</h1>
+    {/* <h1 className="heading">Hello health mantra12!</h1> */}
     {/* {footer} */}
     {/* <Textbox></Textbox> */}
 

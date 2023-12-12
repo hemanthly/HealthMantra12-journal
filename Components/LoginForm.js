@@ -60,6 +60,10 @@ const LoginForm = () => {
         </div>
         <button type="submit" className="btn btn-primary">Login</button>
       </form>
+      <a className='btn btn-block' href="/auth/google" role='button'>
+        {/* <i className='fab fa-google'></i> */}
+        Sign In with Google
+      </a>
     </div>
   );
 };

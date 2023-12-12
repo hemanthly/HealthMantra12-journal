@@ -5,20 +5,15 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
 
-// Import your passport-config.js file
-const passportConfig = require("./config/passport-config");
-
 const cors = require('cors');
 
 const sessionSecret = process.env.SESSION_SECRET || 'aVeryLongAndSecureSecret123!@#';
 
 const JournalTextModel = require('./models/journalTextModel');
 const userModel = require('./models/UserModel');
-
-const authRoutes = require('./Routes/auth');  // Import the authentication routes
-
 const app = express();
 const port = process.env.BACKEND_PORT || 5000;
+
 
 // Middleware to parse incoming JSON requests
 app.use(express.json());
@@ -38,62 +33,88 @@ app.use(session({
     secret: sessionSecret,
     resave: true,
     saveUninitialized: true,
-    cookie: { maxAge: 60 * 60 * 1000 }, // Session lasts for 1 hour
+    cookie: { secure: false }, // Session lasts for 1 hour maxAge: 60 * 60 * 1000
 }));
 
 //Passport middleware setup
 app.use(passport.initialize());
 app.use(passport.session());
 
+require('./Routes/auth');  // Import the authentication routes
+
+// Middleware to check if a user is logged in
+const isLoggedIn = (req, res, next) => {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.status(401).json({ message: 'Unauthorized' });
+  };
+
+
+app.get('/auth/google',
+  passport.authenticate('google', { scope:
+      [ 'email', 'profile' ] }
+));
+
+app.get('/auth/google/callback',
+    passport.authenticate( 'google', {
+        successRedirect: '/auth/protected-journal',
+        failureRedirect: '/auth/google/failure'
+}));
+
+app.get('/auth/protected-journal', isLoggedIn, (req, res)=>{
+    console.log("in protected-journal route.");
+    let name = req.user.displayName;
+    res.send(`Hello ${name}, Welcome to private journalling.`);
+})
+
+app.get('/auth/google/failure', (req, res)=>{
+    res.send("Something went wrong while google O auth athentication!");
+})
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((error) => {
+    console.error("Error while connecting to MongoDB:", error.message);
+  });
+
+// Import your passport-config.js file
+const passportConfig = require("./config/passport-config");
+
 // Configure Passport using the exported object
 passportConfig.initialize(passport);
 
-// Use the authentication routes
-app.use('/auth', authRoutes);
-
-//Routes
+// Routes
 app.get('/', (req, res) => {
     res.send("welcome to node ...!! hemanth");
+});
+
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile'] }));
+
+app.get('/auth/google/home',
+    passport.authenticate('google', { failureRedirect: '/' }),
+    function(req, res) {
+        // Successful authentication, redirect home.
+        res.redirect('/');
+    }
+);
+
+app.get('/login', (req, res) => {
+    res.send('<h1>This is login page!!</h1>');
+});
+
+
+app.get('/register', (req, res) => {
+    res.send('<h1>This is register page!!</h1>');
 })
 
 app.get('/blog', (req, res) => {
     res.send("welcome to heFDGFDGDFGalthmantra BLOG!!");
 })
 
-// app.post('/register', async(req, res) => {
-//     try {
-//         console.log("we entered register post method!!");
-//         const { firstName, lastName, email, password } = req.body; // object Destructuring the request body
-
-//         const newUser = await userModel.create({ firstName, lastName, email, password });
-
-//         res.status(200).json(newUser);
-//     } catch (error) {
-//         console.error(error.message);
-//         res.status(500).json({message: 'Internal Server Error'});
-//     }
-// })
-
-// app.post('/login', async (req, res) => {
-//     try {
-//       const { email, password } = req.body;
-  
-//       // Find the user by email
-//       const user = await User.findOne({ email });
-  
-//       // If the user is not found or the password is incorrect, send an error response
-//       if (!user || !await user.comparePassword(password)) {
-//         return res.status(401).json({ message: 'Invalid email or password' });
-//       }
-  
-//       // If the email and password are correct, you can set up a session or token-based authentication here
-//       // For simplicity, let's just send a success response
-//       res.status(200).json({ message: 'Login successful', user });
-//     } catch (error) {
-//       console.error(error.message);
-//       res.status(500).json({ message: 'Internal Server Error' });
-//     }
-//   });
 
 app.post('/', async(req, res)=>{
 
@@ -113,14 +134,7 @@ app.post('/', async(req, res)=>{
     res.send(req.body);
 })
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((error) => {
-    console.error("Error while connecting to MongoDB:", error.message);
-  });
+
 
 // Your other routes and configurations go here
 

@@ -1,8 +1,32 @@
 const express = require('express');
 const passport = require('passport');
 const User = require('../models/UserModel');
-
+require('dotenv').config(); // Load environment variables
 const router = express.Router();
+const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
+const findOrCreate = require('mongoose-findorcreate');
+
+passport.use(new GoogleStrategy({
+    clientID:    process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:1234/auth/google/callback",
+    passReqToCallback   : true
+  },
+  function(request, accessToken, refreshToken, profile, done) {
+    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    //   return done(err, user);
+    // });
+    done(null, profile);
+
+  }
+));
+
+passport.serializeUser((user, done)=>{
+    done(null, user);
+})
+passport.deserializeUser((user, done)=>{
+    done(null, user);
+})
 
 // Registration route
 router.post('/register', async (req, res) => {
