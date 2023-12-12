@@ -22,7 +22,7 @@ const RegistrationForm = () => {
 
     // console.log("User:", user);
     // Making the registration API call using axios
-    axios.post("http://localhost:4006/auth/register", user)
+    axios.post("http://localhost:4006/register", user)
       .then((response) => {
         console.log("Registration successful", response.data);
         // You can add any further logic here after a successful registration
@@ -33,13 +33,15 @@ const RegistrationForm = () => {
       });
   };
 
-  const handleGoogleSignUp = async () => {
+  const handleGoogleSignUp = async (e) => {
     try {
+      console.log("inside handleGoogleSignUp");
       const response = await axios.get("http://localhost:4006/auth/google", {
         withCredentials: true, // include cookies in the request if needed
       });
 
       if (response.status === 200) {
+        console.log("successful response");
         // Handle successful response, e.g., redirect to the Google authentication page
         window.location.href = "http://localhost:4006/auth/google";
       } else {
@@ -103,9 +105,9 @@ const RegistrationForm = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">Register</button>
+        <button type="submit" href="/auth/google" className="btn btn-primary">Register</button>
       </form>
-      <a className='btn btn-block' onClick={handleGoogleSignUp} role='button'>
+      <a className='btn btn-block' href="/auth/google" onClick={handleGoogleSignUp} role='button'>
         {/* <i className='fab fa-google'></i> */}
         Sign up with Google
       </a>

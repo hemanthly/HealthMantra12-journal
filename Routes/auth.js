@@ -5,28 +5,32 @@ require('dotenv').config(); // Load environment variables
 const router = express.Router();
 const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 const findOrCreate = require('mongoose-findorcreate');
+// Import your passport-config.js file
+const passportConfig = require("../config/passport-config");
+
+// Configure Passport using the exported object
+passportConfig.initialize(passport);
 
 passport.use(new GoogleStrategy({
     clientID:    process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:1234/auth/google/callback",
+    callbackURL: "http://localhost:4006/auth/google/callback",
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
-    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    //   return done(err, user);
-    // });
+    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      return done(err, user);
+    });
     done(null, profile);
-
   }
 ));
 
-passport.serializeUser((user, done)=>{
-    done(null, user);
-})
-passport.deserializeUser((user, done)=>{
-    done(null, user);
-})
+// passport.serializeUser((user, done)=>{
+//     done(null, user);
+// })
+// passport.deserializeUser((user, done)=>{
+//     done(null, user);
+// })
 
 // Registration route
 router.post('/register', async (req, res) => {
@@ -54,25 +58,32 @@ router.post('/register', async (req, res) => {
 
 // Login route with a custom callback
 router.post('/login', (req, res, next) => {
+    console.log("Inside login route auth.js"); // Log to check if the route is being hit
+  
     passport.authenticate('local', (err, user, info) => {
       if (err) {
+        console.error('Error during authentication:', err);
         return res.status(500).json({ message: 'Internal Server Error' });
       }
       if (!user) {
         // User not found or incorrect password
+        console.warn('Authentication failed:', info.message);
         return res.status(401).json({ message: 'Invalid credentials' });
       }
   
       // Log in the user
       req.logIn(user, (err) => {
         if (err) {
+          console.error('Error during login:', err);
           return res.status(500).json({ message: 'Internal Server Error' });
         }
         // Authentication successful
-        return res.status(200).json({ message: 'Login successful fgj' });
+        console.log('Login successful:', user);
+        return res.status(200).json({ message: 'Login successful' });
       });
     })(req, res, next);
   });
+  
   
 
 // Logout route

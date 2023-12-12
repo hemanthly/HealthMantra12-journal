@@ -18,8 +18,9 @@ const LoginForm = () => {
         email: email,
         password: password
     };
-
-    await axios.post("http://localhost:4006/auth/login", data)
+    
+    console.log(data);
+    await axios.post("http://localhost:4006/login", data)
         .then( (response)=>{
             console.log('login status', response);
             console.log("Login API call successful", response.data);
@@ -27,7 +28,6 @@ const LoginForm = () => {
         .catch( (error)=>{
             console.error("Login API call failed", error);
         });
-
   };
 
   return (

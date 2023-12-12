@@ -1,5 +1,4 @@
 require('dotenv').config(); // Load environment variables
-
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
@@ -13,7 +12,6 @@ const JournalTextModel = require('./models/journalTextModel');
 const userModel = require('./models/UserModel');
 const app = express();
 const port = process.env.BACKEND_PORT || 5000;
-
 
 // Middleware to parse incoming JSON requests
 app.use(express.json());
@@ -40,16 +38,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-require('./Routes/auth');  // Import the authentication routes
-
+const routes = require('./Routes/auth');  // Import the authentication routes
+app.use('', routes);
 // Middleware to check if a user is logged in
-const isLoggedIn = (req, res, next) => {
-    if (req.isAuthenticated()) {
+const isLoggedIn = (req, res, next) => { 
+    if (req.isAuthenticated()) { 
       return next();
     }
     res.status(401).json({ message: 'Unauthorized' });
   };
-
 
 app.get('/auth/google',
   passport.authenticate('google', { scope:
@@ -92,8 +89,6 @@ app.get('/', (req, res) => {
     res.send("welcome to node ...!! hemanth");
 });
 
-app.get('/auth/google', passport.authenticate('google', { scope: ['profile'] }));
-
 app.get('/auth/google/home',
     passport.authenticate('google', { failureRedirect: '/' }),
     function(req, res) {
@@ -106,7 +101,6 @@ app.get('/login', (req, res) => {
     res.send('<h1>This is login page!!</h1>');
 });
 
-
 app.get('/register', (req, res) => {
     res.send('<h1>This is register page!!</h1>');
 })
@@ -114,7 +108,6 @@ app.get('/register', (req, res) => {
 app.get('/blog', (req, res) => {
     res.send("welcome to heFDGFDGDFGalthmantra BLOG!!");
 })
-
 
 app.post('/', async(req, res)=>{
 
@@ -133,8 +126,6 @@ app.post('/', async(req, res)=>{
     console.log(req.body);
     res.send(req.body);
 })
-
-
 
 // Your other routes and configurations go here
 
