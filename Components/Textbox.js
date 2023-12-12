@@ -25,6 +25,7 @@ const Textbox = () => {
       // Handle the response if needed
       console.log('API Response:', response.data);
     } catch (error) {
+      console.error(error.stack);
       console.error('API Error:', error.message);
     }
   };

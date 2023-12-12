@@ -113,18 +113,16 @@ app.post('/', async(req, res)=>{
 
     try {
         const { date, title, message } = req.body; // Destructure the request body
-
+        console.log("inside api of journal backend");
         // Create a new journal entry using the JournalTextModel
         const journal = await JournalTextModel.create({ date, title, message });
 
-        res.status(200).json(journal);
+        res.status(200).json({ success: true, data: journal });
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 
-    console.log(req.body);
-    res.send(req.body);
 })
 
 // Your other routes and configurations go here
