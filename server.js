@@ -109,7 +109,7 @@ app.get('/blog', (req, res) => {
     res.send("welcome to heFDGFDGDFGalthmantra BLOG!!");
 })
 
-app.post('/', async(req, res)=>{
+app.post('/journal', async(req, res)=>{
 
     try {
         const { date, title, message } = req.body; // Destructure the request body

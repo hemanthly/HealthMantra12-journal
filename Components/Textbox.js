@@ -20,7 +20,7 @@ const Textbox = () => {
       };
       
       // Make the API call to your server
-      const response = await axios.post('http://localhost:4006/', data); 
+      const response = await axios.post('http://localhost:4006/journal', data); 
 
       // Handle the response if needed
       console.log('API Response:', response.data);
