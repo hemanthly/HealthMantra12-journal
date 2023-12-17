@@ -4,12 +4,14 @@ import RegistrationForm from "./RegistrationForm";
 import LoginForm from "./LoginForm";
 import Textbox from "./Textbox";
 import Error404 from "./Error404";
+import DisplayJournals from "./DisplayJournals";
 
 const AppRouter = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Textbox></Textbox>} />
+        <Route path="/displayJournals" element={<DisplayJournals></DisplayJournals>} />
         <Route path="/register" element={<RegistrationForm></RegistrationForm>} />
         <Route path="/login" element={<LoginForm></LoginForm>}/>
         {/* <Route path="*" element={<Error404></Error404>}/> */}

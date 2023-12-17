@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const User = require('../models/UserModel');
+const JournalTextModel = require('../models/journalTextModel');
 require('dotenv').config(); // Load environment variables
 const router = express.Router();
 const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
@@ -93,7 +94,35 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
   });
   
-  
+// Get all journal entries
+router.get('/displayJournals', async (req, res) => {
+  try {
+    const allJournals = await JournalTextModel.find();
+    res.status(200).json(allJournals);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update a journal entry by ID
+// router.put('/updateJournal/:id', async (req, res) => {
+//   try {
+//     const updatedJournal = await JournalTextModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+//     res.status(200).json(updatedJournal);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
+
+// Delete a journal entry by ID
+router.delete('/deleteJournal/:id', async (req, res) => {
+  try {
+    await JournalTextModel.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: 'Journal entry deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Logout route
 router.get('/logout', (req, res) => {
