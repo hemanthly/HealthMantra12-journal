@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 require('dotenv').config(); // Load environment variables
-
+import { Button } from "react-bootstrap";
 const FRONTEND_API_URL = process.env.REACT_APP_API_URL;
 
 const RegistrationForm = () => {
@@ -36,18 +36,18 @@ const RegistrationForm = () => {
   const handleGoogleSignUp = async (e) => {
     try {
       console.log("inside handleGoogleSignUp");
-      const response = await axios.get("http://localhost:4006/auth/google", {
-        withCredentials: true, // include cookies in the request if needed
-      });
-
-      if (response.status === 200) {
-        console.log("successful response");
-        // Handle successful response, e.g., redirect to the Google authentication page
-        window.location.href = "http://localhost:4006/auth/google";
-      } else {
-        // Handle error response
-        console.error("Google authentication request failed");
-      }
+      // const response = await axios.get("http://localhost:4006/auth/google", {
+      //   withCredentials: true, // include cookies in the request if needed
+      // });
+      window.location.href = "http://localhost:4006/auth/google";
+      // if (response.status === 200) {
+      //   console.log("successful response");
+      //   // Handle successful response, e.g., redirect to the Google authentication page
+      //   window.location.href = "http://localhost:4006/auth/google";
+      // } else {
+      //   // Handle error response
+      //   console.error("Google authentication request failed");
+      // }
     } catch (error) {
       console.error("Error during Google authentication request", error);
     }
@@ -105,12 +105,20 @@ const RegistrationForm = () => {
             required
           />
         </div>
-        <button type="submit" href="/auth/google" className="btn btn-primary">Register</button>
+        <Button variant="warning" type='submit'>
+          Register
+        </Button>
       </form>
-      <a className='btn btn-block' href="/auth/google" onClick={handleGoogleSignUp} role='button'>
+      <Button variant="secondary" type='submit' onClick={handleGoogleSignUp}>
+          Sign Up with Google
+      </Button>
+      <Button variant="info" type='submit' onClick={handleGoogleSignUp}>
+          Login with Google
+      </Button>
+      {/* <a className='btn btn-block' href="/auth/google" onClick={handleGoogleSignUp} role='button'> */}
         {/* <i className='fab fa-google'></i> */}
-        Sign up with Google
-      </a>
+        {/* Sign up with Google */}
+      {/* </a> */}
     </div>
 
   );
