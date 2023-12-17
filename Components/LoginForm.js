@@ -1,13 +1,35 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import axios from "axios";
+import { Button } from 'react-bootstrap';
 
 const LoginForm = () => {
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
+  
+  const handleGoogleSignUp = async (e) => {
+    try {
+      console.log("inside handleGoogleSignUp");
+      // const response = await axios.get("http://localhost:4006/auth/google", {
+      //   withCredentials: true, // include cookies in the request if needed
+      // });
+      window.location.href = "http://localhost:4006/auth/google";
+      // if (response.status === 200) {
+      //   console.log("successful response");
+      //   // Handle successful response, e.g., redirect to the Google authentication page
+      //   window.location.href = "http://localhost:4006/auth/google";
+      // } else {
+      //   // Handle error response
+      //   console.error("Google authentication request failed");
+      // }
+    } catch (error) {
+      console.error("Error during Google authentication request", error);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,12 +82,12 @@ const LoginForm = () => {
         </div>
         <button type="submit" className="btn btn-primary">Login</button>
       </form>
-      <a className='btn btn-block' href="/auth/google" role='button'>
-        {/* <i className='fab fa-google'></i> */}
-        Sign In with Google
-      </a>
+      <Button variant="info" type='submit' onClick={handleGoogleSignUp}>
+          Login with Google
+      </Button>
     </div>
   );
+
 };
 
 export default LoginForm;
