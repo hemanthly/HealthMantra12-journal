@@ -46,7 +46,7 @@ const isLoggedIn = (req, res, next) => {
       return next();
     }
     res.status(401).json({ message: 'Unauthorized' });
-  };
+};
 
 app.get('/auth/google',
   passport.authenticate('google', { scope:
@@ -97,19 +97,7 @@ app.get('/auth/google/home',
     }
 );
 
-app.get('/login', (req, res) => {
-    res.send('<h1>This is login page!!</h1>');
-});
-
-app.get('/register', (req, res) => {
-    res.send('<h1>This is register page!!</h1>');
-})
-
-app.get('/blog', (req, res) => {
-    res.send("welcome to heFDGFDGDFGalthmantra BLOG!!");
-})
-
-app.post('/', async(req, res)=>{
+app.post('/journal', async(req, res)=>{
 
     try {
         const { date, title, message } = req.body; // Destructure the request body
