@@ -114,7 +114,6 @@ app.post('/journal', async(req, res)=>{
 })
 
 // Your other routes and configurations go here
-
 app.listen(port, () => {
     console.log(`app is listening to port : ${port}`);
 })

@@ -1,0 +1,61 @@
+{
+  "name": "journal-app",
+  "version": "1.0.0",
+  "description": "daily diary for everyone",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html",
+    "test": "jest"
+  },
+  "proxy": "http://localhost:4006",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hemanthly/HealthMantra12-journal.git"
+  },
+  "keywords": [
+    "react",
+    "hemanth",
+    "healthmantra12"
+  ],
+  "author": "Hemanth Lishetti",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hemanthly/HealthMantra12-journal/issues"
+  },
+  "homepage": "https://github.com/hemanthly/HealthMantra12-journal#readme",
+  "devDependencies": {
+    "assert": "^2.1.0",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
+    "console-browserify": "^1.2.0",
+    "crypto-browserify": "^3.12.0",
+    "events": "^3.3.0",
+    "https-browserify": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "parcel": "^2.10.3",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
+    "punycode": "^1.4.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.3",
+    "util": "^0.12.5"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "bootstrap": "^5.3.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "node-fetch": "^3.3.2",
+    "npkill": "^0.11.3",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.9.1",
+    "react-datepicker": "^4.24.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.1"
+  },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions"
+  ]
+}
