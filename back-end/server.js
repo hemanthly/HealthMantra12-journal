@@ -3,13 +3,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
-
+const isLoggedIn = require("./Middlewares/isLoggedIn");
 const cors = require('cors');
 
 const sessionSecret = process.env.SESSION_SECRET || 'aVeryLongAndSecureSecret123!@#';
 
-const JournalTextModel = require('./models/journalTextModel');
-const userModel = require('./models/UserModel');
+const JournalTextModel = require('./Models/journalTextModel');
+const userModel = require('./Models/UserModel');
 const app = express();
 const port = process.env.BACKEND_PORT || 5000;
 
@@ -31,7 +31,10 @@ app.use(session({
     secret: sessionSecret,
     resave: true,
     saveUninitialized: true,
-    cookie: { secure: false }, // Session lasts for 1 hour maxAge: 60 * 60 * 1000
+    cookie: { 
+        secure: true,
+        maxAge: 1 * 60 * 1000  // 1 minute session time
+    }, 
 }));
 
 //Passport middleware setup
@@ -40,13 +43,6 @@ app.use(passport.session());
 
 const routes = require('./Routes/auth');  // Import the authentication routes
 app.use('', routes);
-// Middleware to check if a user is logged in
-const isLoggedIn = (req, res, next) => { 
-    if (req.isAuthenticated()) { 
-      return next();
-    }
-    res.status(401).json({ message: 'Unauthorized' });
-};
 
 app.get('/auth/google',
   passport.authenticate('google', { scope:
@@ -61,7 +57,8 @@ app.get('/auth/google/callback',
 
 app.get('/auth/protected-journal', isLoggedIn, (req, res)=>{
     console.log("in protected-journal route.");
-    let name = req.user.displayName;
+    // let name = req.user.displayName;
+    let name = "Hemanth";
     res.send(`Hello ${name}, Welcome to private journalling.`);
 })
 
@@ -97,7 +94,7 @@ app.get('/auth/google/home',
     }
 );
 
-app.post('/journal', async(req, res)=>{
+app.post('/journal', isLoggedIn, async(req, res)=>{
 
     try {
         const { date, title, message } = req.body; // Destructure the request body

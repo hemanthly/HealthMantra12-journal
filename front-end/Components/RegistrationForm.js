@@ -3,6 +3,7 @@ import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 require('dotenv').config(); // Load environment variables
 import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 const FRONTEND_API_URL = process.env.REACT_APP_API_URL;
 
 const RegistrationForm = () => {
@@ -16,6 +17,7 @@ const RegistrationForm = () => {
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,6 +27,7 @@ const RegistrationForm = () => {
     axios.post("http://localhost:4006/register", user)
       .then((response) => {
         console.log("Registration successful", response.data);
+        navigate("/journal");
         // You can add any further logic here after a successful registration
       })
       .catch((error) => {
@@ -36,18 +39,9 @@ const RegistrationForm = () => {
   const handleGoogleSignUp = async (e) => {
     try {
       console.log("inside handleGoogleSignUp");
-      // const response = await axios.get("http://localhost:4006/auth/google", {
-      //   withCredentials: true, // include cookies in the request if needed
-      // });
+
       window.location.href = "http://localhost:4006/auth/google";
-      // if (response.status === 200) {
-      //   console.log("successful response");
-      //   // Handle successful response, e.g., redirect to the Google authentication page
-      //   window.location.href = "http://localhost:4006/auth/google";
-      // } else {
-      //   // Handle error response
-      //   console.error("Google authentication request failed");
-      // }
+
     } catch (error) {
       console.error("Error during Google authentication request", error);
     }

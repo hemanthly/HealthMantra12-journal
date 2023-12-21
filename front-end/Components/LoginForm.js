@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import axios from "axios";
 import { Button } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
 
@@ -10,6 +11,7 @@ const LoginForm = () => {
 
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
+  const navigate = useNavigate();
   
   const handleGoogleSignUp = async (e) => {
     try {
@@ -46,6 +48,8 @@ const LoginForm = () => {
         .then( (response)=>{
             console.log('login status', response);
             console.log("Login API call successful", response.data);
+
+            navigate("/journal");
         })
         .catch( (error)=>{
             console.error("Login API call failed", error);

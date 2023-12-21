@@ -1,14 +1,15 @@
 const express = require('express');
 const passport = require('passport');
-const User = require('../models/UserModel');
-const JournalTextModel = require('../models/journalTextModel');
+const User = require('../Models/UserModel');
+const JournalTextModel = require('../Models/journalTextModel');
 require('dotenv').config(); // Load environment variables
 const router = express.Router();
+const isLoggedIn = require("../Middlewares/isLoggedIn");
 const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 const findOrCreate = require('mongoose-findorcreate');
 // Import your passport-config.js file
 const passportConfig = require("../config/passport-config");
-
+const DeleteJournal = require("../Controllers/DeleteJournal");
 // Configure Passport using the exported object
 passportConfig.initialize(passport);
 
@@ -69,7 +70,8 @@ router.post('/register', async (req, res) => {
 // Login route with a custom callback
 router.post('/login', (req, res, next) => {
     console.log("Inside login route auth.js"); // Log to check if the route is being hit
-  
+    // const sessionData = req.session;
+    // console.log("session data: ",sessionData);
     passport.authenticate('local', (err, user, info) => {
       if (err) {
         console.error('Error during authentication:', err);
@@ -115,28 +117,21 @@ router.get('/displayJournals', async (req, res) => {
 // });
 
 // Delete a journal entry by ID
-router.delete('/deleteJournal/:id', async (req, res) => {
-  try {
-    await JournalTextModel.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: 'Journal entry deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+// router.delete('/deleteJournal/:id', async (req, res) => {
+//   try {
+//     await JournalTextModel.findByIdAndDelete(req.params.id);
+//     res.status(200).json({ message: 'Journal entry deleted successfully' });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
+router.delete('/deleteJournal/:id', DeleteJournal);
 
 // Logout route
 router.get('/logout', (req, res) => {
   req.logout(); // Passport function to log out
   res.status(200).json({ message: 'Logout successful' });
 });
-
-// Middleware to check if a user is logged in
-const isLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.status(401).json({ message: 'Unauthorized' });
-};
 
 // This is a midddleware can be used for protected routes ex: dashboard which should only be visible to loggedIn users.
 // 
