@@ -1,0 +1,20 @@
+version: "2.23.3-desktop.2"
+services:
+    back-end: 
+      build: ./back-end
+      container_name: back-end_c
+      ports:
+        - '4006:4006'
+      volumes:
+        - ./back-end:/app
+        - C:/HEMANTH/CODEPROJECTS/Journal-app/back-end/node_modules:./app/node_modules
+    front-end:
+      build: ./front-end
+      container_name: front-end_c
+      ports:
+        - '1234:1234'
+      volumes:
+        - ./front-end:/app
+        - C:\HEMANTH\CODEPROJECTS\Journal-app\front-end\node_modules:./app/node_modules
+      stdin_open: true
+      tty: true

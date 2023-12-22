@@ -94,7 +94,7 @@ app.get('/auth/google/home',
     }
 );
 
-app.post('/journal', isLoggedIn, async(req, res)=>{
+app.post('/journal', async(req, res)=>{
 
     try {
         const { date, title, message } = req.body; // Destructure the request body

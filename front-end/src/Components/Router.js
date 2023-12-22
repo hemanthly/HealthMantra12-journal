@@ -16,7 +16,7 @@ const AppRouter = () => {
         <Route path="/displayJournals" element={<DisplayJournals></DisplayJournals>} />
         <Route path="/register" element={<RegistrationForm></RegistrationForm>} />
         <Route path="/login" element={<LoginForm></LoginForm>}/>
-        {/* <Route path="*" element={<Error404></Error404>}/> */}
+        <Route path="*" element={<Error404></Error404>}/>
         {/* Add other routes as needed */}
       </Routes>
     </Router>

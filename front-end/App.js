@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Textbox from "./Components/Textbox";
-import AppRouter from "./Components/Router";
+// import Textbox from "./src/Components/Textbox";
+import AppRouter from "./src/Components/Router";
 
 const AppWrapper = () => (
   <div id="container">
